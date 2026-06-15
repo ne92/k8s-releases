@@ -1,0 +1,32 @@
+server:
+  dev:
+    enabled: false
+
+  standalone:
+    enabled: true
+    config: |
+      ui = true
+
+      listener "tcp" {
+        tls_disable = 1
+        address     = "[::]:8200"
+      }
+
+      storage "file" {
+        path = "/vault/data"
+      }
+  
+  dataStorage:
+    enabled: true
+    size: ${VAULT_STORAGE_SIZE:-1Gi}
+    storageClass: ${VAULT_STORAGE_CLASS:-null}      # uses default StorageClass — change if needed
+    accessMode: ReadWriteOnce
+  
+  extraEnvironmentVars:
+    VAULT_SKIP_VERIFY: "true"
+
+ui:
+  enabled: true
+
+injector:
+  enabled: false

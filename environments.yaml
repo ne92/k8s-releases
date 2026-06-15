@@ -1,0 +1,4 @@
+environments:
+  {{ .Values.clusterName }}:
+    values:
+      - clusters/{{ .Values.clusterName }}/values.yaml

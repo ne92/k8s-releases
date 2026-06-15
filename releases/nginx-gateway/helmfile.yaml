@@ -1,0 +1,35 @@
+repositories:
+  - name: incubator
+    url: https://charts.helm.sh/incubator
+
+templates:
+  values: &values
+    namespace: nginx-gateway
+    labels:
+      sub_release: nginx-gateway
+    values:
+      - "templates/{{.Release.Name}}.yaml.gotmpl"
+
+  httproute-values: &httproute-values
+    labels:
+      sub_release: httproutes
+    values:
+      - "templates/{{.Release.Name}}.yaml.gotmpl"
+
+releases:
+  - name: nginx-gateway
+    <<: *values
+    chart: oci://ghcr.io/nginx/charts/nginx-gateway-fabric
+    version: "2.5.1"
+
+  - name: httproute-vault
+    <<: *httproute-values
+    namespace: vault
+    chart: incubator/raw
+    version: "0.2.5"
+
+  - name: httproute-argocd
+    <<: *httproute-values
+    namespace: argocd
+    chart: incubator/raw
+    version: "0.2.5"

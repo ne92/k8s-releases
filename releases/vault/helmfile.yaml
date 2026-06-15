@@ -1,0 +1,17 @@
+repositories:
+  - name: hashicorp
+    url: https://helm.releases.hashicorp.com
+
+templates:
+  values: &values
+    namespace: vault
+    labels:
+      sub_release: vault
+    values:
+      - "templates/{{.Release.Name}}.yaml.gotmpl"
+
+releases:
+  - name: vault
+    <<: *values
+    chart: hashicorp/vault
+    version: "0.31.0"

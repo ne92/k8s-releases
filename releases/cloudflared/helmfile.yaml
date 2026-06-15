@@ -1,0 +1,17 @@
+repositories:
+  - name: incubator
+    url: https://charts.helm.sh/incubator
+
+templates:
+  values: &values
+    namespace: cloudflared
+    labels:
+      sub_release: cloudflared
+    values:
+      - "templates/{{.Release.Name}}.yaml.gotmpl"
+
+releases:
+  - name: cloudflared
+    <<: *values
+    chart: incubator/raw
+    version: "0.2.5"

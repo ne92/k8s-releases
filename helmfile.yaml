@@ -1,0 +1,10 @@
+# helmfile.yaml - Root entry point
+# Usage:
+#   helmfile --environment dev sync
+#   helmfile --environment staging sync
+#   helmfile --environment prod sync
+bases:
+  - environments.yaml
+
+helmfiles:
+  - "releases/*/helmfile.yaml"

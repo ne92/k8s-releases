@@ -1,0 +1,25 @@
+# .gitignore for k8s-argocd-releases
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Helm
+charts/
+*.tgz
+
+# Helm release artifacts
+helmfile.lock.yaml
+.helmfile-cache/
+
+# OS
+Thumbs.db

@@ -1,0 +1,60 @@
+nginxGateway:
+  name: "nginx-gateway"
+  autoscaling:
+    enable: false
+    annotations: {}
+    minReplicas: 1
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 50
+    targetMemoryUtilizationPercentage: 50
+    # -- The full HPA `spec.behavior` object, passed as-is to the HPA resource. Accepts any valid Kubernetes HPA behavior spec. See the [Kubernetes docs](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#configurable-scaling-behavior) for all available fields.
+    behavior: {}
+    #  scaleDown:
+    #    stabilizationWindowSeconds: 300
+    #    policies:
+    #    - type: Pods
+    #      value: 1
+    #      periodSeconds: 180
+    #  scaleUp:
+    #    stabilizationWindowSeconds: 300
+    #      policies:
+    #      - type: Pods
+    #        value: 2
+    #        periodSeconds: 60
+
+nginx:
+  replicas: 1
+
+  autoscaling:
+    enable: false
+    annotations: {}
+    minReplicas: 1
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 50
+    targetMemoryUtilizationPercentage: 50
+  
+  image:
+    repository: ghcr.io/nginx/nginx-gateway-fabric/nginx
+    tag: 2.5.1
+  
+  service:
+    type: NodePort
+    nodePorts: 
+      - port: <YOUR_PORT>
+        listenerPort: 80
+    debug: false
+
+gateways:
+  - name: nginx-gateway
+    namespace: nginx-gateway
+    labels:
+      gateway: nginx-gateway
+    spec:
+      gatewayClassName: nginx
+      listeners:
+        - name: http
+          port: 80
+          protocol: HTTP
+          allowedRoutes:
+            namespaces:
+              from: All

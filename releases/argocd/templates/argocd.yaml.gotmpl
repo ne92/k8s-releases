@@ -1,0 +1,91 @@
+global:
+  domain: ${ARGOCD_DOMAIN:-argocd.example.com}
+
+certificate:
+  enabled: false        # fine for test, no cert-manager needed
+
+server:
+  ingress:
+    enabled: false
+  extraArgs:
+    - --insecure      
+
+crds:
+  install: true          
+
+controller:
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m       
+      memory: 128Mi
+
+repoServer:
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 40m
+      memory: 64Mi
+  extraContainers:     #To enable Helmfile in ArgoCD
+    - name: helmfile-cmp
+      image: ghcr.io/helmfile/helmfile:v1.1.0
+      command: [/var/run/argocd/argocd-cmp-server]
+      env:
+        - name: HELM_CACHE_HOME
+          value: /helm-working-dir/cache
+        - name: HELM_CONFIG_HOME
+          value: /helm-working-dir/config
+        - name: HELM_DATA_HOME
+          value: /helm-working-dir/data
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 999
+      volumeMounts:
+        - name: var-files
+          mountPath: /var/run/argocd
+        - name: plugins
+          mountPath: /home/argocd/cmp-server/plugins
+        - name: cmp-tmp
+          mountPath: /tmp
+        - name: helmfile-plugin
+          mountPath: /home/argocd/cmp-server/config/plugin.yaml
+          subPath: plugin.yaml
+        - name: helm-working-dir
+          mountPath: /helm-working-dir
+  volumes:
+    - name: cmp-tmp
+      emptyDir: {}
+    - name: helmfile-plugin
+      configMap:
+        name: helmfile-cmp-plugin
+
+applicationSet:
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 25m
+      memory: 32Mi
+
+redis:
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 25m
+      memory: 32Mi
+
+dex:
+  enabled: false
+
+configs:
+  params:
+    server.insecure: true  # confirms HTTP mode alongside --insecure flag
+  secret:
+    argocdServerAdminPassword: ""  # leave empty = auto-generated, check the secret after deploy

@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cloudflared
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
+spec:
+  project: default
+  source:
+    repoURL: git@github.com:ne92/k8s-core-releases.git
+    targetRevision: main
+    path: releases/cloudflared
+    plugin:
+      name: helmfile
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: cloudflared
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true 

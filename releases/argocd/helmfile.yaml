@@ -1,0 +1,20 @@
+repositories:
+  - name: argo
+    url: https://argoproj.github.io/argo-helm
+
+templates:
+  values: &values
+    namespace: argocd
+    labels:
+      sub_release: argocd
+    values:
+      - "templates/{{.Release.Name}}.yaml.gotmpl"
+
+releases:
+  - name: argocd
+    <<: *values
+    chart: argo/argo-cd
+    version: "9.5.19"
+    hooks:
+      - events: ["postsync"]
+        command: kubectl apply -f hooks/helmfile-cmp-plugin.yaml

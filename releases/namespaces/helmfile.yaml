@@ -1,0 +1,28 @@
+# releases/namespaces/helmfile.yaml
+repositories:
+  - name: incubator
+    url: https://charts.helm.sh/incubator
+
+templates:
+  values: &values
+    namespace: kube-system
+    labels:
+      sub_release: namespace
+    values:
+      - "templates/{{.Release.Name}}.yaml.gotmpl"
+
+releases:
+  - name: vault
+    <<: *values
+    chart: incubator/raw
+    version: "0.2.5"
+
+  - name: atlantis
+    <<: *values
+    chart: incubator/raw
+    version: "0.2.5"
+  
+  - name: nginx-gateway
+    <<: *values
+    chart: incubator/raw
+    version: "0.2.5"

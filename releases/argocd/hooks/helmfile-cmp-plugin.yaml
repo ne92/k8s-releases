@@ -1,0 +1,23 @@
+# ArgoCD CMP Plugin Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: helmfile-cmp-plugin
+  namespace: argocd
+data:
+  plugin.yaml: |
+    apiVersion: argoproj.io/v1alpha1
+    kind: ConfigManagementPlugin
+    metadata:
+      name: helmfile
+    spec:
+      allowConcurrency: true
+      discover:
+        fileName: helmfile.yaml
+      generate:
+        command:
+          - bash
+          - "-c"
+          - |
+            helmfile template
+      lockRepo: false
