@@ -1,4 +1,4 @@
-# k8s-argocd-releases
+# k8s-releases
 
 A Helmfile-based Kubernetes configuration repository for managing core ArgoCD and related services deployments.
 
