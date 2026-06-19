@@ -1,0 +1,31 @@
+replicaCount: 1
+image:
+  repository: homeassistant/home-assistant
+  tag: latest
+  pullPolicy: IfNotPresent
+
+podSecurityContext:
+  runAsUser: 0
+  fsGroup: 0
+
+resources:
+  requests:
+    memory: "512Mi"
+    cpu: "250m"
+  limits:
+    memory: "2Gi"
+    cpu: "1000m"
+
+env:
+  TZ: UTC
+
+service:
+  type: ClusterIP
+  port: 8123
+
+persistence:
+  enabled: true
+  accessMode: ReadWriteOnce
+  size: 10Gi
+  mountPath: /config
+  storageClassName: local-path

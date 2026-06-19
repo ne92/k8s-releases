@@ -1,0 +1,18 @@
+repositories:
+  - name: incubator
+    url: https://charts.helm.sh/incubator
+
+templates:
+  values: &values
+    namespace: homeassistant
+    labels:
+      sub_release: homeassistant
+    values:
+      - "values.yaml"
+      - "templates/{{.Release.Name}}.yaml.gotmpl"
+
+releases:
+  - name: homeassistant
+    <<: *values
+    chart: incubator/raw
+    version: "0.2.5"
