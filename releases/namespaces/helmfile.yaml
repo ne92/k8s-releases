@@ -17,7 +17,7 @@ releases:
     chart: incubator/raw
     version: "0.2.5"
 
-  - name: atlantis
+  - name: homeassistant
     <<: *values
     chart: incubator/raw
     version: "0.2.5"
