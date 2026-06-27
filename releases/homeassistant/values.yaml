@@ -19,6 +19,12 @@ resources:
 env:
   TZ: UTC
 
+homeassistantConfig:   #Cloudflare tunnel proxy support for Home Assistant
+  http:
+    use_x_forwarded_for: true
+    trusted_proxies:
+      - 10.244.0.0/16
+
 service:
   type: ClusterIP
   port: 8123

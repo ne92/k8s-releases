@@ -26,6 +26,7 @@ k8s-releases/
 │   ├── vault/
 │   ├── nginx-gateway/
 │   ├── cloudflared/
+│   ├── homeassistant/
 │   └── namespaces/
 ```
 
